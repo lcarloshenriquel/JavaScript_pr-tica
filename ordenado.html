@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ordenação de Valores</title>
+    <!-- Inclusão do Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Ordenador de Valores</h1>
+
+        <!-- Campo de entrada numérico e botão adicionar -->
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="valor" class="form-label">Digite um valor:</label>
+                <input type="number" id="valor" class="form-control" placeholder="Digite um número">
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button class="btn btn-primary w-100" onclick="add()">Adicionar</button>
+            </div>
+        </div>
+
+        <!-- Campo de seleção do algoritmo e botões de ação -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <label for="algoritmo" class="form-label">Escolha o algoritmo de ordenação:</label>
+                <select id="algoritmo" class="form-select">
+                    <option value="bubble" selected>Bubble Sort</option>
+                    <option value="selection">Selection Sort</option>
+                    <option value="quick">Quick Sort</option>
+                </select>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button class="btn btn-success w-100" onclick="ordenar()">Ordenar</button>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button class="btn btn-warning w-100" onclick="misturar()">Misturar</button>
+            </div>
+        </div>
+
+        <!-- Lista de valores -->
+        <div class="row">
+            <div class="col-md-6">
+                <ul id="valores" class="list-group">
+                    <!-- Valores adicionados serão exibidos aqui -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inclusão do Bootstrap JS e Popper.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Inclusão do script de ordenação -->
+    <script src="ordenado.js"></script>
+
+    <!-- Funções add, ordenar e misturar -->
+    <script>
+        function add() {
+            const inputValor = document.getElementById("valor");
+            const listaValores = document.getElementById("valores");
+            const node = document.createElement("li");
+            node.classList.add("list-group-item"); // Classe do Bootstrap para estilizar o item da lista
+            const textoNode = document.createTextNode(inputValor.value);
+            node.appendChild(textoNode);
+            listaValores.appendChild(node);
+            inputValor.value = ''; // Limpar o campo de entrada após adicionar
+        }
+
+        function ordenar() {
+            const listaValores = document.getElementById("valores");
+            const algoritmo = document.getElementById("algoritmo");
+            const itens = Array.from(listaValores.children).map(item => parseInt(item.innerHTML));
+
+            // Escolher o algoritmo de ordenação com base na seleção do usuário
+            switch (algoritmo.selectedIndex) {
+                case 0:
+                    bubble_sort(itens);
+                    break;
+                case 1:
+                    selection_sort(itens);
+                    break;
+                case 2:
+                    quick_sort(itens, 0, itens.length - 1);
+                    break;
+            }
+
+            // Substituir o conteúdo da lista pelos itens ordenados
+            listaValores.innerHTML = itens.map(item => `<li class="list-group-item">${item}</li>`).reduce((a, b) => a + b, "");
+        }
+
+        function misturar() {
+            const listaValores = document.getElementById("valores");
+            const itens = Array.from(listaValores.children).map(item => parseInt(item.innerHTML));
+
+            // Aplicar a função shuffle para embaralhar os itens
+            shuffle(itens, itens.length * 2);
+
+            // Substituir o conteúdo da lista pelos itens embaralhados
+            listaValores.innerHTML = itens.map(item => `<li class="list-group-item">${item}</li>`).reduce((a, b) => a + b, "");
+        }
+    </script>
+
+</body>
+</html>
